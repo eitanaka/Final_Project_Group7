@@ -268,11 +268,13 @@ def train(train_dataloader, eval_dataloader, model, optimizer, accelerator, vali
             start_logits.append(accelerator.gather(outputs.start_logits).cpu().numpy())
             end_logits.append(accelerator.gather(outputs.end_logits).cpu().numpy())
 
-        start_logits = np.concatenate(start_logits)
-        end_logits = np.concatenate(end_logits)
-        start_logits = start_logits[:, len(validation_dataset)]
-        end_logits = end_logits[:, len(validation_dataset)]
+        start_logits = np.concatenate(start_logits)     # (num_eval_examples, context_len)
+        end_logits = np.concatenate(end_logits)     # (num_eval_examples, context_len)
 
+        start_logits = start_logits[:, len(validation_dataset)]    # (num_eval_examples, )
+        end_logits = end_logits[:, len(validation_dataset)]     # (num_eval_examples, )
+
+        # Compute the validation metrics
         mertics = compute_metrics(
             start_logits, end_logits, validation_dataset, raw_dataset["validation"]
         )
@@ -287,13 +289,98 @@ def train(train_dataloader, eval_dataloader, model, optimizer, accelerator, vali
         if accelerator.is_local_main_process:
             tokenizer.save_pretrained(MODEL_PATH)
 
+# ====================================== Fine Tuning ======================================
+def fine_tune(model, train_dataset, eval_dataset, raw_datasets):
+    """
+    Fine-tune the model on the SQuAD dataset with the Trainer API.
+    :param model:
+    :param train_dataset:
+    :param eval_dataset:
+    :return:
+    """
+
+    args = TrainingArguments(
+        output_dir=os.path.join(MODEL_PATH, "electra-finetuned-squadv2"),
+        evaluation_strategy="no",
+        save_strategy="epoch",
+        learning_rate=learning_rate,
+        num_train_epochs=num_epochs,
+        weight_decay=0.01,
+        fp16=True,
+    )
+
+    trainer = Trainer(
+        model=model,
+        args=args,
+        train_dataset=train_dataset,
+        eval_dataset=eval_dataset,
+        data_collator=default_data_collator,
+        tokenizer=tokenizer,
+    )
+
+    trainer.train()
+    trainer.save_model(os.path.join(MODEL_PATH, "electra-finetuned-squadv2"))
+
+    predictions, labels, metrics = trainer.predict(eval_dataset)
+    start_logits, end_logits = predictions
+
+    return compute_metrics(start_logits, end_logits, eval_dataset, raw_datasets["validation"])
+
+
+# ====================================== Prediction ======================================
+def predict(model_path, question, context):
+    """
+    Predict the answer to a question given the context.
+    :param model:
+    :param question:
+    :param context:
+    :return:
+    """
+
+    model_path = model_path
+    model = ElectraForQuestionAnswering.from_pretrained(model_path)
+
+    inputs = tokenizer.encode_plus(question, context, return_tensors="pt")
+    input_ids = inputs["input_ids"].tolist()[0]
+
+    text_tokens = tokenizer.convert_ids_to_tokens(input_ids)
+    answer_start_scores, answer_end_scores = model(**inputs).to_tuple()
+
+    answer_start = torch.argmax(answer_start_scores)
+    answer_end = torch.argmax(answer_end_scores) + 1
+
+    answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
+
+    return answer
+
 # ====================================== Compute Metrics ======================================
+"""
+The hardest part of the pipeline is to compute the metrics.
+Since we padded all the samples to the maximum length we set, there is no data collator to define, so this metric computation is really specific to the task.
+The difficult part will be to post-processing the model predictions into spans of text that can be compared to the ground truth.
+Steps:
+We need see how we will get one answer for each example in our validation set.
+The processing of the initial dataset implies splitting examples in several features, which may or may not contain the answer.
+Passing those features through the model will yield several predictions for each feature (logit).
+The model will give us logits for start and end positions for each feature, since our labels are the indices of the tokens that correspond to the answer.
+We must then somehow convert those logits into an answer, and then, pick one of the various answers for each feature gives to be the answer for the example.
+
+1. We will need the map from examples to features, which we can create by looping through all the features and storing the example_id associated to each feature.
+2. We could just take the best index for the start and end logits and be done. But if our model predict something impossible, like the token in the quesiton, 
+we will look at more of the logits. We attribute a score to each pair of start and end logits by taking the product of their probabilities.
+3. We loop through the best start and end logits and pick the corresponding answers.
+4. We can check our predicted answer with the label.
+5. We can then loop through all the possible examples.
+
+"""
 def compute_metrics(start_logits, end_logits, features, examples):
     example_to_feature = collections.defaultdict(list)
+    # Loop through all the features to gather the mapping from example to features.
     for idx, feature in enumerate(features):
         example_to_feature[feature["example_id"]].append(idx)
 
     predicted_answers = []
+    theoretical_answers = []
 
     for example in tqdm(examples):
         example_id = example["id"]
@@ -302,6 +389,15 @@ def compute_metrics(start_logits, end_logits, features, examples):
 
         # Loop through all the features associated to the example_id in order to gather all the predictions
         for feature_idx in example_to_feature[example_id]:
+
+            # We grave the actual answer for this feature
+            theoretical_answers.append(
+                {
+                    "id": example_id,
+                    "answers": example["answers"],
+                }
+            )
+
             start_logit = start_logits[feature_idx]
             end_logit = end_logits[feature_idx]
             offsets = features[feature_idx]["offset_mapping"]
@@ -312,6 +408,7 @@ def compute_metrics(start_logits, end_logits, features, examples):
 
             for start_index in start_indexes:
                 for end_index in end_indexes:
+
                     # Skip answers that are not fully in the context
                     if offsets[start_index] is None or offsets[end_index] is None:
                         continue
@@ -323,7 +420,7 @@ def compute_metrics(start_logits, end_logits, features, examples):
                         continue
 
                     answer = {
-                        "text": context[offsets[start_index][0] : offsets[end_index][1]],
+                        "text": context[offsets[start_index][0]:offsets[end_index][1]],
                         "logit_score": start_logit[start_index] + end_logit[end_index],
                     }
                     answers.append(answer)
@@ -347,8 +444,6 @@ def compute_metrics(start_logits, end_logits, features, examples):
                     }
                 )
 
-    theoretical_answers = [{"id": ex["id"], "answers": ex["answers"]} for ex in examples]
-
     metric = load_metric("squad_v2")
 
     return metric.compute(predictions=predicted_answers, references=theoretical_answers)
@@ -358,57 +453,57 @@ def main():
     # Load dataset
     raw_dataset = load_dataset("squad_v2")
 
-    # Reduce dataset size for testing
-    small_train_dataset = raw_dataset['train'].select(range(500))  # Select first 100 examples
-    small_validation_dataset = raw_dataset['validation'].select(range(100))  # Select first 50 examples
-
-    train_dataset = small_train_dataset.map(
-        preprocess_training_examples,
-        batched=True,
-        remove_columns=small_train_dataset.column_names
-    )
-
-    validation_dataset = small_validation_dataset.map(
-        preprocessing_validation_example,
-        batched=True,
-        remove_columns=small_validation_dataset.column_names
-    )
-
-
-    # # Load dataset (I can create the new data frame)
-    # raw_dataset = load_dataset("squad_v2")
+    # # Reduce dataset size for testing
+    # small_train_dataset = raw_dataset['train'].select(range(500))  # Select first 100 examples
+    # small_validation_dataset = raw_dataset['validation'].select(range(100))  # Select first 50 examples
+    # small_raw_dataset = DatasetDict({'train': small_train_dataset, 'validation': small_validation_dataset})
     #
-    # # Preprocess dataset
-    # train_dataset = raw_dataset['train'].map(
+    # train_dataset = small_train_dataset.map(
     #     preprocess_training_examples,
     #     batched=True,
-    #     remove_columns=raw_dataset["train"].column_names
+    #     remove_columns=small_train_dataset.column_names
     # )
     #
-    # print(len(raw_dataset['train']), len(train_dataset))
-    #
-    # validation_dataset = raw_dataset['validation'].map(
+    # validation_dataset = small_validation_dataset.map(
     #     preprocessing_validation_example,
     #     batched=True,
-    #     remove_columns=raw_dataset["validation"].column_names
+    #     remove_columns=small_validation_dataset.column_names
     # )
-    #
-    #
-    # print(len(raw_dataset['validation']), len(validation_dataset))
-    #
+
+    # Preprocess dataset
+    train_dataset = raw_dataset['train'].map(
+        preprocess_training_examples,
+        batched=True,
+        remove_columns=raw_dataset["train"].column_names
+    )
+
+    print(len(raw_dataset['train']), len(train_dataset))
+
+    validation_dataset = raw_dataset['validation'].map(
+        preprocessing_validation_example,
+        batched=True,
+        remove_columns=raw_dataset["validation"].column_names
+    )
+
     train_dataloader, eval_dataloader = process_data_to_model_inputs(train_dataset, validation_dataset)
-    #
-    print(len(train_dataloader), len(eval_dataloader))
-    #
-    # # Training
+
+    # # # Training
     model, optimizer = model_init()
-    #
     accelerator = Accelerator()
     model, optimizer, train_dataloader, eval_dataloader = accelerator.prepare(
         model, optimizer, train_dataloader, eval_dataloader
     )
-    #
-    train(train_dataloader, eval_dataloader, model, optimizer, accelerator, validation_dataset, small_raw_dataset)
+
+    # train(train_dataloader, eval_dataloader, model, optimizer, accelerator, validation_dataset, small_raw_dataset)
+    results = fine_tune(model, train_dataset, validation_dataset, raw_dataset)
+    print(results)
+
+    # Predict
+    model_path = os.path.join(MODEL_PATH, 'electra-finetuned-squadv2')
+    context = "My name is Wolfgang and I live in Berlin"
+    question = "Where do I live?"
+    prediction = predict(model_path, context, question)
+    print(prediction)
 
 if __name__ == '__main__':
     main()
