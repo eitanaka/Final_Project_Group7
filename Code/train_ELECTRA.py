@@ -495,12 +495,17 @@ def main():
     )
 
     # train(train_dataloader, eval_dataloader, model, optimizer, accelerator, validation_dataset, small_raw_dataset)
-    results = fine_tune(model, train_dataset, validation_dataset, raw_dataset)
-    print(results)
+    # results = fine_tune(model, train_dataset, validation_dataset, raw_dataset)
+    # print(results)
 
     # Predict
-    model_path = os.path.join(MODEL_PATH, 'electra-finetuned-squadv2')
-    context = "My name is Wolfgang and I live in Berlin"
+    model_path = os.path.join(MODEL_PATH, 'electra-finetuned-squadv2', 'checkpoint-49410')
+    context = "My name is Sylvain and I live in Paris. " \
+              "I am a student at Sorbonne University. " \
+              "I am currently working on my master's degree in computer science." \
+              "I am also a research engineer at Hugging Face." \
+              "I love playing the piano and the guitar." \
+              "I have a dog called Pixel."
     question = "Where do I live?"
     prediction = predict(model_path, context, question)
     print(prediction)
