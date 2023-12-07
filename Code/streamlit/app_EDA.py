@@ -20,6 +20,8 @@ XLNET_checkpoint = ""
 XLNET_finetuned_checkpoint = ""
 
 # ============================== Page ====================================
-st.title("EDA")
+st.title("Question Answering on SQuAD 2.0")
+
+st.header("Exploratory Data Analysis (EDA)")
 
 # Add contents for the page here.
