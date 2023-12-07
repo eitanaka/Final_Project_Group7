@@ -38,6 +38,8 @@ show_pages(
     ]
 )
 
-# ============================== Main Contents ====================================
+# =============.================= Main Contents ====================================
 st.title("Introduction")
+
+# Add contents for the page here.
 

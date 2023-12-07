@@ -21,3 +21,5 @@ XLNET_finetuned_checkpoint = ""
 
 # ============================== Page ====================================
 st.title("EDA")
+
+# Add contents for the page here.
