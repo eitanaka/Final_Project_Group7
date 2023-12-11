@@ -9,9 +9,10 @@ References:
 # ============================== imorts =======================================
 import os
 from tkinter import Image
-
+from PIL import Image
 import streamlit as st
 from st_pages import Page, show_pages, add_page_title
+
 
 # ============================== Setup / constants ====================================
 # Set up paths
@@ -19,7 +20,6 @@ OS_PATH = os.getcwd()
 os.chdir("../../")
 ROOT_PATH = os.getcwd()
 IMAGE_PATH = os.path.join(OS_PATH, 'assets')
-IMAGE_PATH1 = os.path.join(IMAGE_PATH, "FIGURE01.png")
 MODEL_PATH = os.path.join(ROOT_PATH, "Models")
 ELECTRA_PATH = os.path.join(MODEL_PATH, "ELECTRA", "electra-finetuned-squadv2")
 XLNET_PATH = ""
@@ -58,6 +58,18 @@ st.write("In the Natural Language Processing (NLP) field, extractive Question An
          "As detailed in Hugging Face's documentation and task library (n.d.), "
          "extractive QA demands the capability to sift through extensive text and pinpoint information that precisely responds to the query.")
 
+IMAGE_PATH2 = os.path.join(IMAGE_PATH, "Figure_nlp_task.png")
+st.write("Figure 01")
+img2 = Image.open(IMAGE_PATH2)
+st.image(img2)
+
+st.write("Jurafsky and Martin (2023), in their seminal work," "Speech and Language Processing," "elucidate the complexities of extractive QA, highlighting the necessity for advanced NLP techniques and models."
+"These models are crucial for understanding the context and semantics embedded in both the question and the passage, thus enabling the identification of the exact text span that answers the question."
+"Extractive QA is particularly vital in scenarios necessitating factual answers directly sourced from the provided text, such as in academic research or specific information retrieval tasks."
+"In our project, we embrace the challenges of extractive QA by training our model on the SQuAD 2.0 dataset. "
+"This dataset, encompassing diverse questions and passages, provides a comprehensive framework for the system to learn from varying contexts and question types." ""
+"The model is meticulously trained to parse the subtleties of language in questions and passages, enhancing its ability to discern and extract the relevant answers accurately." 
+"This endeavor underscores the significance of sophisticated text processing and comprehension in NLP, laying the groundwork for more intelligent and adept information retrieval systems.")
 
 st.header("Dataset")
 
@@ -66,8 +78,9 @@ st.write("SQuAD 2.0 stands as an innovative dataset strategically crafted to pro
          "These questions leverage the same passages employed in SQuAD 1.1 but are intentionally formulated to maintain relevance to the content while introducing plausible yet incorrect answers. "
          "This deliberate shift from the preceding version, which solely featured answerable questions with correct responses within the provided text, signifies a significant evolution. "
          "Below, we present two illustrative examples of this distinctive design.")
-from PIL import Image
-#url = '/Users/ponswarnalayaravichandran/Desktop/Fall2023_nlp/project/Code/streamlit/assets/FIGURE01.png'
+
+IMAGE_PATH1 = os.path.join(IMAGE_PATH, "FIGURE01.png")
+st.write("Figure 02")
 img = Image.open(IMAGE_PATH1)
 st.image(img)
 st.write("The principal objective underlying the conception of SQuAD 2.0 is to present a formidable challenge to and elevate the proficiency of machine learning models in discerning instances where a correct answer is absent within the provided text." 
@@ -87,3 +100,30 @@ st.write("SQuAD 2.0 has been released to the public and currently stands as the 
         "To uphold quality standards, questions from workers who produced fewer than 25 questions per article were excluded. This approach was instrumental in filtering out contributions from individuals facing challenges with the assigned task. "
          "Subsequently, the dataset underwent partitioning into training, development, and test sets, adhering to the same article distribution as SQuAD 1.1, amalgamating new and existing data. In the development and test sets, articles lacking unanswerable questions were omitted, ensuring an approximately equal ratio of answerable and unanswerable questions."
          " However, the training data exhibited about twice as many answerable questions as unanswerable ones.")
+
+st.write("In creating the SQuAD 2.0 dataset, crowdworkers from the Daemo crowdsourcing platform were employed to generate unanswerable questions." ""
+         "Their task involved creating up to five questions per paragraph from articles in SQuAD 1.1, stipulating that these questions could not be answered based on the paragraph alone. " 
+         "Despite this, the questions had to contain plausible answers and reference entities within the paragraph." ""
+         "To guide the process, workers were shown corresponding questions from SQuAD 1.1 and encouraged to make the unanswerable questions resemble the answerable ones." 
+         "Each worker dedicated approximately 7 minutes to each paragraph and received $10.50 per hour compensation.")
+
+st.write("Questions from workers who wrote fewer than 25 questions per article were discarded to maintain quality." 
+         "This approach helped filter out contributions from those who struggled with the task. The dataset was then divided into training, development, and test splits, following the same article partition as SQuAD 1.1, combining new and existing data." 
+         "In the development and test sets, articles without unanswerable questions were removed, leading to an approximately equal ratio of answerable and unanswerable questions. However, The training data had about twice as many answerable questions as unanswerable ones")
+
+IMAGE_PATH3 = os.path.join(IMAGE_PATH, "Fig_03.png")
+st.write("Figure 03")
+img3 = Image.open(IMAGE_PATH3)
+st.image(img3)
+st.write('The instructions are shown to crowdworkers at the beginning of each question writing task. (Rajpurakar, et al. 2018)' )
+
+st.write("For dataset validation, additional crowdworkers were hired to answer all questions in the development and test sets of SQuAD 2.0." 
+         "They were presented with entire articles and associated questions, which were a mix of answerable and unanswerable types." ""
+         "Workers had to highlight the answer in the paragraph or mark the question as unanswerable, with an average time of one minute spent per question." 
+         "Multiple answers were collected for each question to ensure accuracy and reduce response variance. The final answer was determined through a majority vote, with a preference for shorter answers and a tendency to resolve ties by opting to provide an answer." 
+         "On average, 4.8 responses were gathered per question. This method contrasts with the evaluation of SQuAD 1.1, where only a single human's performance was assessed, likely leading to an underestimation of human accuracy in the earlier dataset.")
+IMAGE_PATH3 = os.path.join(IMAGE_PATH, "Fig 04.png")
+st.write("Figure 04")
+img4 = Image.open(IMAGE_PATH3)
+st.image(img4)
+
