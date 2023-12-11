@@ -70,7 +70,7 @@ with st.echo():
     response = requests.get(github_raw_url)
     image = Image.open(BytesIO(response.content))
 
-st.image(image, caption='Fig-2: Two unanswerable questions written by crowdworkers and plausible (but incorrect) answers. Relevant keywords are shown in blue. (Rajpurakar, et al. 2018)')
+    st.image(image, caption='Fig-2: Two unanswerable questions written by crowdworkers and plausible (but incorrect) answers. Relevant keywords are shown in blue. (Rajpurakar, et al. 2018)')
 st.write("The principal objective underlying the conception of SQuAD 2.0 is to present a formidable challenge to and elevate the proficiency of machine learning models in discerning instances where a correct answer is absent within the provided text." 
          "This task introduces a heightened level of complexity compared to SQuAD 1.1, wherein models were tasked with identifying the text span most pertinent to the posed question." 
          "SQuAD 2.0 aspires to cultivate a deeper understanding and critical analysis, thereby pushing the boundaries of machine learning models' capabilities in comprehending and interpreting textual information."
