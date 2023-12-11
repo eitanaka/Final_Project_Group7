@@ -62,7 +62,7 @@ options = ['Context Length Analysis Train',
            'Word Length Analysis',
            'Distribution of question type train',
            'Distribution of question type dev'
-           'Answer position analysis']
+           'Answer context similarity and Answer position analysis']
 
 # Create a radio button in Streamlit
 selected_option = st.radio("Select an option:", options)
@@ -81,7 +81,6 @@ image_paths = {
 'Distribution of question type train': IMAGE_PATH16,
 'Distribution of question type test': IMAGE_PATH17,
 'Answer context similarity and Answer position analysis': IMAGE_PATH19,
-
 }
 
 # Display the selected image
