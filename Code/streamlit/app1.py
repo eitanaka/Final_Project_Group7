@@ -60,6 +60,10 @@ st.write("SQuAD 2.0 stands as an innovative dataset strategically crafted to pro
          "These questions leverage the same passages employed in SQuAD 1.1 but are intentionally formulated to maintain relevance to the content while introducing plausible yet incorrect answers. "
          "This deliberate shift from the preceding version, which solely featured answerable questions with correct responses within the provided text, signifies a significant evolution. "
          "Below, we present two illustrative examples of this distinctive design.")
+from PIL import Image
+url = 'https://github.com/eitanaka/NLP_Final_Project_Group7/blob/main/Code/streamlit/assets/FIGURE01.png'
+img = Image.open(url)
+st.image(img)
 st.write("The principal objective underlying the conception of SQuAD 2.0 is to present a formidable challenge to and elevate the proficiency of machine learning models in discerning instances where a correct answer is absent within the provided text." 
          "This task introduces a heightened level of complexity compared to SQuAD 1.1, wherein models were tasked with identifying the text span most pertinent to the posed question." 
          "SQuAD 2.0 aspires to cultivate a deeper understanding and critical analysis, thereby pushing the boundaries of machine learning models' capabilities in comprehending and interpreting textual information."
