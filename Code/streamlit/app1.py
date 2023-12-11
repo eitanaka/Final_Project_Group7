@@ -19,7 +19,7 @@ OS_PATH = os.getcwd()
 os.chdir("../../")
 ROOT_PATH = os.getcwd()
 IMAGE_PATH = os.path.join(OS_PATH, 'assets')
-IMAGE_PATH1 = 'path/to/FIGURE01.png'
+IMAGE_PATH1 = os.path.join(IMAGE_PATH, "FIGURE01.png")
 MODEL_PATH = os.path.join(ROOT_PATH, "Models")
 ELECTRA_PATH = os.path.join(MODEL_PATH, "ELECTRA", "electra-finetuned-squadv2")
 XLNET_PATH = ""
@@ -53,6 +53,12 @@ st.write("In the dynamic realm of Natural Language Processing (NLP), the advent 
 
 st.header("NLP Task - Question Answering")
 
+st.write("In the Natural Language Processing (NLP) field, extractive Question Answering (QA) is a pivotal task involving locating the answer to a question within a specified text passage. "
+         "This task is inherently challenging, as it requires the system to comprehend the posed question and accurately extract the specific text portion that contains the answer. "
+         "As detailed in Hugging Face's documentation and task library (n.d.), "
+         "extractive QA demands the capability to sift through extensive text and pinpoint information that precisely responds to the query.")
+
+
 st.header("Dataset")
 
 st.write("SQuAD 2.0 stands as an innovative dataset strategically crafted to propel advancements in the domain of machine reading comprehension—an integral facet of natural language understanding. "
@@ -61,8 +67,8 @@ st.write("SQuAD 2.0 stands as an innovative dataset strategically crafted to pro
          "This deliberate shift from the preceding version, which solely featured answerable questions with correct responses within the provided text, signifies a significant evolution. "
          "Below, we present two illustrative examples of this distinctive design.")
 from PIL import Image
-url = '/Users/ponswarnalayaravichandran/Desktop/Fall2023_nlp/project/Code/streamlit/assets/FIGURE01.png'
-img = Image.open(url)
+#url = '/Users/ponswarnalayaravichandran/Desktop/Fall2023_nlp/project/Code/streamlit/assets/FIGURE01.png'
+img = Image.open(IMAGE_PATH1)
 st.image(img)
 st.write("The principal objective underlying the conception of SQuAD 2.0 is to present a formidable challenge to and elevate the proficiency of machine learning models in discerning instances where a correct answer is absent within the provided text." 
          "This task introduces a heightened level of complexity compared to SQuAD 1.1, wherein models were tasked with identifying the text span most pertinent to the posed question." 
