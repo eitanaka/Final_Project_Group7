@@ -20,6 +20,8 @@ OS_PATH = os.getcwd()
 os.chdir("../../")
 ROOT_PATH = os.getcwd()
 IMAGE_PATH = os.path.join(OS_PATH, 'assets')
+IMAGE_PATH1 = os.path.join(IMAGE_PATH, "FIGURE01.png")
+IMAGE_PATH3 = os.path.join(IMAGE_PATH, "Fig_03.png")
 MODEL_PATH = os.path.join(ROOT_PATH, "Models")
 ELECTRA_PATH = os.path.join(MODEL_PATH, "ELECTRA", "electra-finetuned-squadv2")
 XLNET_PATH = ""
@@ -58,10 +60,10 @@ st.write("In the Natural Language Processing (NLP) field, extractive Question An
          "As detailed in Hugging Face's documentation and task library (n.d.), "
          "extractive QA demands the capability to sift through extensive text and pinpoint information that precisely responds to the query.")
 
-IMAGE_PATH2 = os.path.join(IMAGE_PATH, "Figure_nlp_task.png")
-st.write("Figure 01")
-img2 = Image.open(IMAGE_PATH2)
-st.image(img2)
+# IMAGE_PATH2 = os.path.join(IMAGE_PATH, "Figure_nlp_task.png")
+# st.write("Figure 01")
+# img2 = Image.open(IMAGE_PATH2)
+# st.image(img2)
 
 st.write("Jurafsky and Martin (2023), in their seminal work," "Speech and Language Processing," "elucidate the complexities of extractive QA, highlighting the necessity for advanced NLP techniques and models."
 "These models are crucial for understanding the context and semantics embedded in both the question and the passage, thus enabling the identification of the exact text span that answers the question."
@@ -79,10 +81,10 @@ st.write("SQuAD 2.0 stands as an innovative dataset strategically crafted to pro
          "This deliberate shift from the preceding version, which solely featured answerable questions with correct responses within the provided text, signifies a significant evolution. "
          "Below, we present two illustrative examples of this distinctive design.")
 
-IMAGE_PATH1 = os.path.join(IMAGE_PATH, "FIGURE01.png")
 st.write("Figure 02")
 img = Image.open(IMAGE_PATH1)
 st.image(img)
+
 st.write("The principal objective underlying the conception of SQuAD 2.0 is to present a formidable challenge to and elevate the proficiency of machine learning models in discerning instances where a correct answer is absent within the provided text." 
          "This task introduces a heightened level of complexity compared to SQuAD 1.1, wherein models were tasked with identifying the text span most pertinent to the posed question." 
          "SQuAD 2.0 aspires to cultivate a deeper understanding and critical analysis, thereby pushing the boundaries of machine learning models' capabilities in comprehending and interpreting textual information."
@@ -111,7 +113,7 @@ st.write("Questions from workers who wrote fewer than 25 questions per article w
          "This approach helped filter out contributions from those who struggled with the task. The dataset was then divided into training, development, and test splits, following the same article partition as SQuAD 1.1, combining new and existing data." 
          "In the development and test sets, articles without unanswerable questions were removed, leading to an approximately equal ratio of answerable and unanswerable questions. However, The training data had about twice as many answerable questions as unanswerable ones")
 
-IMAGE_PATH3 = os.path.join(IMAGE_PATH, "Fig_03.png")
+
 st.write("Figure 03")
 img3 = Image.open(IMAGE_PATH3)
 st.image(img3)
