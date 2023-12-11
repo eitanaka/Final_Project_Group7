@@ -3,21 +3,21 @@ import os
 import streamlit as st
 import torch
 import transformers
-from transformers import ElectraTokenizer, ElectraForQuestionAnswering
+from peft import PeftConfig, PeftModel
+from transformers import ElectraTokenizer, ElectraForQuestionAnswering, BertTokenizerFast, BertForQuestionAnswering
 # ============================== Setup / constants ====================================
 # Set up paths
 OS_PATH = os.getcwd()
 os.chdir("../../")
 ROOT_PATH = os.getcwd()
 MODEL_PATH = os.path.join(ROOT_PATH, "Models")
-XLNET_PATH = ""
 os.chdir(OS_PATH)
 
 # Model Checkpoints
 electra_finetuned_checkpoint = "checkpoint-49410"
 electra_check_point = "google/electra-base-discriminator"
-XLNET_checkpoint = ""
-XLNET_finetuned_checkpoint = ""
+BERT = "qa-bert-base"
+LORA_BERT_checkpoint = "LORA-QA_BERT"
 
 # ============================== function ====================================
 def predict(model_name, question, context):
@@ -27,9 +27,17 @@ def predict(model_name, question, context):
         model = ElectraForQuestionAnswering.from_pretrained(model_path)
         tokenizer = ElectraTokenizer.from_pretrained(electra_check_point)
 
-    elif model_name == "XLNET":
-        model_path = ""
-        model = ""
+    elif model_name == "BERT":
+        model_path = os.path.join(MODEL_PATH, BERT)
+        model = BertForQuestionAnswering.from_pretrained(model_path)
+        tokenizer = BertTokenizerFast.from_pretrained(model_path)
+
+    elif model_name == "BERT_with_LORA":
+        model_path = os.path.join(MODEL_PATH, LORA_BERT_checkpoint)
+        config = PeftConfig.from_pretrained(model_path)
+        model = PeftModel.from_pretrained(BertForQuestionAnswering.from_pretrained(config.base_model_name_or_path),
+                                          model_path)
+        tokenizer = BertTokenizerFast.from_pretrained(config.base_model_name_or_path)
 
     inputs = tokenizer.encode_plus(question, context, return_tensors="pt")
     input_ids = inputs["input_ids"].tolist()[0]
@@ -50,7 +58,7 @@ st.title("Question Answering on SQuAD 2.0")
 st.header("Demo: Free Question Answering")
 
 st.sidebar.title("Model Selection: ")
-model_name = st.sidebar.selectbox("Select Model", ("ELECTRA", "XLNET"))
+model_name = st.sidebar.selectbox("Select Model", ("BERT", "ELECTRA", "BERT_with_LORA"))
 
 # Initialize session state for question and context
 if 'context' not in st.session_state:

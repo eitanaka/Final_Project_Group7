@@ -17,9 +17,9 @@ from st_pages import Page, show_pages, add_page_title
 # ============================== Setup / constants ====================================
 # Set up paths
 OS_PATH = os.getcwd()
+IMAGE_PATH = os.path.join(OS_PATH, 'assets')
 os.chdir("../../")
 ROOT_PATH = os.getcwd()
-IMAGE_PATH = os.path.join(OS_PATH, 'assets')
 IMAGE_PATH1 = os.path.join(IMAGE_PATH, "FIGURE01.png")
 IMAGE_PATH2 = os.path.join(IMAGE_PATH, "Figure_nlp_task.png")
 IMAGE_PATH3 = os.path.join(IMAGE_PATH, "Fig_03.png")
@@ -34,6 +34,9 @@ electra_checkpoint = "google/electra-base-discriminator"
 electra_finetuned_checkpoint = "checkpoint-49410"
 XLNET_checkpoint = ""
 XLNET_finetuned_checkpoint = ""
+
+# Set up pages
+st.set_page_config(layout="wide")
 
 # Specify what pages should be shown in the sidebar, and what their labels should be
 show_pages(
