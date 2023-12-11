@@ -62,15 +62,15 @@ st.write("SQuAD 2.0 stands as an innovative dataset strategically crafted to pro
          "Below, we present two illustrative examples of this distinctive design.")
 from PIL import Image
 import os
+import requests
+from io import BytesIO
 with st.echo():
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    os.chdir('..')
+    github_raw_url = 'https://github.com/eitanaka/NLP_Final_Project_Group7/blob/main/Code/streamlit/assets/FIGURE01.png'
 
-    path = os.getcwd() + os.path.sep + 'static' + os.path.sep + 'FIGURE01.png'
+    response = requests.get(github_raw_url)
+    image = Image.open(BytesIO(response.content))
 
-    image = Image.open(path)
-
-    st.image(image, caption='Fig-2: Two unanswerable questions written by crowdworkers and plausible (but incorrect) answers. Relevant keywords are shown in blue. (Rajpurakar, et al. 2018)')
+st.image(image, caption='Fig-2: Two unanswerable questions written by crowdworkers and plausible (but incorrect) answers. Relevant keywords are shown in blue. (Rajpurakar, et al. 2018)')
 st.write("The principal objective underlying the conception of SQuAD 2.0 is to present a formidable challenge to and elevate the proficiency of machine learning models in discerning instances where a correct answer is absent within the provided text." 
          "This task introduces a heightened level of complexity compared to SQuAD 1.1, wherein models were tasked with identifying the text span most pertinent to the posed question." 
          "SQuAD 2.0 aspires to cultivate a deeper understanding and critical analysis, thereby pushing the boundaries of machine learning models' capabilities in comprehending and interpreting textual information."
