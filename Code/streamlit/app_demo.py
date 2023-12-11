@@ -4,20 +4,22 @@ import streamlit as st
 import torch
 import transformers
 from transformers import ElectraTokenizer, ElectraForQuestionAnswering
+import timeit
+from peft import PeftConfig, PeftModel
+from transformers import BertForQuestionAnswering, BertTokenizerFast, pipeline
 # ============================== Setup / constants ====================================
 # Set up paths
 OS_PATH = os.getcwd()
 os.chdir("../../")
 ROOT_PATH = os.getcwd()
 MODEL_PATH = os.path.join(ROOT_PATH, "Models")
-XLNET_PATH = ""
 os.chdir(OS_PATH)
 
 # Model Checkpoints
 electra_finetuned_checkpoint = "checkpoint-49410"
 electra_check_point = "google/electra-base-discriminator"
-XLNET_checkpoint = ""
-XLNET_finetuned_checkpoint = ""
+LORA_BERT_checkpoint = "bert-base-uncased"
+
 
 # ============================== function ====================================
 def predict(model_name, question, context):
@@ -27,9 +29,12 @@ def predict(model_name, question, context):
         model = ElectraForQuestionAnswering.from_pretrained(model_path)
         tokenizer = ElectraTokenizer.from_pretrained(electra_check_point)
 
-    elif model_name == "XLNET":
-        model_path = ""
-        model = ""
+    elif model_name == "BERT with LORA":
+        model_path = os.path.join(MODEL_PATH,  "LORA-QA_BERT", LORA_BERT_checkpoint)
+        config = PeftConfig.from_pretrained(model_path)
+        model = PeftModel.from_pretrained(BertForQuestionAnswering.from_pretrained(config.base_model_name_or_path),
+                                          model_path)
+        tokenizer = BertTokenizerFast.from_pretrained(config.base_model_name_or_path)
 
     inputs = tokenizer.encode_plus(question, context, return_tensors="pt")
     input_ids = inputs["input_ids"].tolist()[0]
@@ -50,7 +55,7 @@ st.title("Question Answering on SQuAD 2.0")
 st.header("Demo: Free Question Answering")
 
 st.sidebar.title("Model Selection: ")
-model_name = st.sidebar.selectbox("Select Model", ("ELECTRA", "XLNET"))
+model_name = st.sidebar.selectbox("Select Model", ("ELECTRA", "LORA_BERT"))
 
 # Initialize session state for question and context
 if 'context' not in st.session_state:
