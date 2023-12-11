@@ -18,10 +18,12 @@ IMAGE_PATH13_t = os.path.join(IMAGE_PATH, "Answer_len_train.png")
 IMAGE_PATH13_d = os.path.join(IMAGE_PATH, "Answer_len_dev.png")
 IMAGE_PATH14_t = os.path.join(IMAGE_PATH, "ans_vs_unans_train.png")
 IMAGE_PATH14_d = os.path.join(IMAGE_PATH, "ans_vs_unans_dev.png" )
-IMAGE_PATH15 = os.path.join(IMAGE_PATH, "Most_common_both.png" )
-IMAGE_PATH16 = os.path.join(IMAGE_PATH, "Distribution_ques_both.png" )
-IMAGE_PATH17 = os.path.join(IMAGE_PATH, "Ans_pos.png" )
-IMAGE_PATH18 = os.path.join(IMAGE_PATH, "comparison.png" )
+IMAGE_PATH15 = os.path.join(IMAGE_PATH, "Most_com_ques_train.jpeg" )
+IMAGE_PATH16 = os.path.join(IMAGE_PATH, "most_com_words_ques_dev.jpeg" )
+IMAGE_PATH17 = os.path.join(IMAGE_PATH, "distribution dev.jpeg" )
+IMAGE_PATH18 = os.path.join(IMAGE_PATH, "distribution dev.jpeg" )
+IMAGE_PATH19 = os.path.join(IMAGE_PATH, "Average context question similarity and answer position analysis.jpeg" )
+IMAGE_PATH20 = os.path.join(IMAGE_PATH, "comparison.png" )
 MODEL_PATH = os.path.join(ROOT_PATH, "Models")
 ELECTRA_PATH = os.path.join(MODEL_PATH, "ELECTRA", "electra-finetuned-squadv2")
 XLNET_PATH = ""
@@ -58,7 +60,8 @@ options = ['Context Length Analysis Train',
            'Answerable vs Unanswerable Questions Train',
            'Answerable vs Unanswerable Questions Test',
            'Word Length Analysis',
-           'Distribution of question type',
+           'Distribution of question type train',
+           'Distribution of question type dev'
            'Answer position analysis']
 
 # Create a radio button in Streamlit
@@ -75,8 +78,9 @@ image_paths = {
 'Answerable vs Unanswerable Questions Train': IMAGE_PATH14_t,
 'Answerable vs Unanswerable Questions Test': IMAGE_PATH14_d,
 'Word Length Analysis':IMAGE_PATH15,
-'Distribution of question type': IMAGE_PATH16,
-'Answer position analysis': IMAGE_PATH17,
+'Distribution of question type train': IMAGE_PATH16,
+'Distribution of question type test': IMAGE_PATH17,
+'Answer context similarity and Answer position analysis': IMAGE_PATH19,
 
 }
 
@@ -90,5 +94,5 @@ else:
 st.write("The below figure is the comparison of the SQuAD 1.1 and SQuAD 2.0 representing the train, development and test values "
          "of the total examples, negative examples, total articles and articles with negatives ")
 
-img2 = Image.open(IMAGE_PATH18)
+img2 = Image.open(IMAGE_PATH20)
 st.image(img2)
