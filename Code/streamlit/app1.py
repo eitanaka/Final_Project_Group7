@@ -61,7 +61,7 @@ st.write("SQuAD 2.0 stands as an innovative dataset strategically crafted to pro
          "This deliberate shift from the preceding version, which solely featured answerable questions with correct responses within the provided text, signifies a significant evolution. "
          "Below, we present two illustrative examples of this distinctive design.")
 from PIL import Image
-url = 'https://github.com/eitanaka/NLP_Final_Project_Group7/blob/main/Code/streamlit/assets/FIGURE01.png'
+url = '/Users/ponswarnalayaravichandran/Desktop/Fall2023_nlp/project/Code/streamlit/assets/FIGURE01.png'
 img = Image.open(url)
 st.image(img)
 st.write("The principal objective underlying the conception of SQuAD 2.0 is to present a formidable challenge to and elevate the proficiency of machine learning models in discerning instances where a correct answer is absent within the provided text." 
