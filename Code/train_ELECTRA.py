@@ -2,6 +2,7 @@
 Author: Ei Tanaka
 Date: Nov 28, 2023
 Purpose: Train ELECTRA model
+References:
 """
 
 # ====================================== Import ======================================
@@ -326,6 +327,34 @@ def fine_tune(model, train_dataset, eval_dataset, raw_datasets):
 
     return compute_metrics(start_logits, end_logits, eval_dataset, raw_datasets["validation"])
 
+# ====================================== Evaluation ======================================
+def evaluate(model, eval_dataloader, eval_dataset, raw_datasets, accelerator):
+
+    model.eval()
+    start_logits = []
+    end_logits = []
+
+    with tqdm(total=len(eval_dataloader), desc="Evaluating", unit="batch") as progress_bar:
+        for batch in eval_dataloader:
+            with torch.no_grad():
+                outputs = model(**batch)
+
+            start_logits.append(accelerator.gather(outputs.start_logits).cpu().numpy())
+            end_logits.append(accelerator.gather(outputs.end_logits).cpu().numpy())
+            progress_bar.update(1)
+
+        start_logits = np.concatenate(start_logits)  # (num_eval_examples, context_len)
+        end_logits = np.concatenate(end_logits)  # (num_eval_examples, context_len)
+
+        start_logits = start_logits[:, len(eval_dataloader)]  # (num_eval_examples, )
+        end_logits = end_logits[:, len(eval_dataloader)]  # (num_eval_examples, )
+
+    # Compute the validation metrics
+    mertics = compute_metrics(
+        start_logits, end_logits, eval_dataset, raw_datasets["validation"]
+    )
+
+    return mertics
 
 # ====================================== Prediction ======================================
 def predict(model_path, question, context):
@@ -453,31 +482,12 @@ def main():
     # Load dataset
     raw_dataset = load_dataset("squad_v2")
 
-    # # Reduce dataset size for testing
-    # small_train_dataset = raw_dataset['train'].select(range(500))  # Select first 100 examples
-    # small_validation_dataset = raw_dataset['validation'].select(range(100))  # Select first 50 examples
-    # small_raw_dataset = DatasetDict({'train': small_train_dataset, 'validation': small_validation_dataset})
-    #
-    # train_dataset = small_train_dataset.map(
-    #     preprocess_training_examples,
-    #     batched=True,
-    #     remove_columns=small_train_dataset.column_names
-    # )
-    #
-    # validation_dataset = small_validation_dataset.map(
-    #     preprocessing_validation_example,
-    #     batched=True,
-    #     remove_columns=small_validation_dataset.column_names
-    # )
-
     # Preprocess dataset
     train_dataset = raw_dataset['train'].map(
         preprocess_training_examples,
         batched=True,
         remove_columns=raw_dataset["train"].column_names
     )
-
-    print(len(raw_dataset['train']), len(train_dataset))
 
     validation_dataset = raw_dataset['validation'].map(
         preprocessing_validation_example,
@@ -487,16 +497,22 @@ def main():
 
     train_dataloader, eval_dataloader = process_data_to_model_inputs(train_dataset, validation_dataset)
 
-    # # # Training
+    # Training
     model, optimizer = model_init()
     accelerator = Accelerator()
     model, optimizer, train_dataloader, eval_dataloader = accelerator.prepare(
         model, optimizer, train_dataloader, eval_dataloader
     )
-
-    # train(train_dataloader, eval_dataloader, model, optimizer, accelerator, validation_dataset, small_raw_dataset)
+    # train(train_dataloader, eval_dataloader, model, optimizer, accelerator, validation_dataset, raw_dataset)
     # results = fine_tune(model, train_dataset, validation_dataset, raw_dataset)
     # print(results)
+
+    # Evaluation
+    model_path = os.path.join(MODEL_PATH, 'electra-finetuned-squadv2', 'checkpoint-49410')
+    model = ElectraForQuestionAnswering.from_pretrained(model_path)
+    model.to(device)
+    results = evaluate(model, eval_dataloader, validation_dataset, raw_dataset, accelerator)
+    print(results)
 
     # Predict
     model_path = os.path.join(MODEL_PATH, 'electra-finetuned-squadv2', 'checkpoint-49410')
