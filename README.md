@@ -42,6 +42,7 @@ Our goal is to develop a system that can efficiently and accurately provide answ
    ```bash
    python train_ELECTRA.py
    ```
+   
    This will start the training process of the ELECTRA model on the SQuAD 2.0 dataset. The script handles the following:
       - Data loading and preprocessing: Tokenizes the SQuAD dataset and prepares it for training.
       - Model initialization: Loads the ELECTRA model pre-trained on the Google ELECTRA base discriminator.
