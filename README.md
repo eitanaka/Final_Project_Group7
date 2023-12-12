@@ -32,13 +32,16 @@ Our goal is to develop a system that can efficiently and accurately provide answ
       - Seaborn and Matplotlib for visualization (optional)
       - tqdm for progress bars
    You can install these prerequisites using pip:
+
    ```bash
    pip install torch transformers datasets accelerate seaborn matplotlib tqdm
    ```
+   
    **Script Usage**   
    a. Navigate to the Script Directory: Make sure you are in the directory containing the train_ELECTRA.py script.
    b. Set Up Parameters (Optional): You can modify the script to change parameters like max_length, stride, learning_rate, etc., according to your requirements.
    c. Run the Script: Execute the script using the following command:
+   
    ```bash
    python train_ELECTRA.py
    ```
