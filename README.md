@@ -20,25 +20,24 @@ Our goal is to develop a system that can efficiently and accurately provide answ
    ```bash
    Git clone https://github.com/eitanaka/NLP_Final_Project_Group7.git
 
-### 2. Data Loading:
+2. **Fine-Tuning the ELECTRA**:
    
-   * Load the data
-           train - https://rajpurkar.github.io/SQuAD-explorer/dataset/train-v2.0.json
-            Dev -  https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.
-### 3. Train :
-   Install the dependencies and start working on the train dataset
+3. **Fine-Tuning the BERT with LoRA**:
 
-# Contributors
+4. **Play with the streamlit app**
+   To start working with the streamlit, make sure to install streamlit
+   ```bash
+   pip install streamlit
 
-Cody Yu
-Pon swarnalaya Ravichandran
-Ei Tanaka
+## Contributors
+- Cody Yu
+- Pon swarnalaya Ravichandran
+- Ei Tanaka
 
 # License
 (add only if applicable)
 
 # Acknowledgments
-
 (Acknowledgments to people, resources, or institutions)
 
 For more details, please refer to individual files and folders.
