@@ -8,8 +8,6 @@ Our goal is to develop a system that can efficiently and accurately provide answ
 
 # Project Structure
 
-README.md – Defines the structure of the repo
-
 Code – This folder contains the code, images used in the code and all files needed to run the application seamlessly.
 
 Final-Group-Presentation - This folder has the PDF version of group project presentation
