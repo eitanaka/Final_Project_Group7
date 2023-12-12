@@ -57,6 +57,23 @@ Our goal is to develop a system that can efficiently and accurately provide answ
    f. Evaluation and Prediction: Post-training, the script evaluates the model on the validation dataset and can be used to make predictions on new data.
    
 5. **Fine-Tuning the BERT with LoRA**:
+    The train_BERT_3.py script is designed to fine-tune the BERT model with LORA which is fine-tuning approach to decrease parameters for the task of question answering using the SQuAD 2.0 dataset. This script handles the entire process from data preprocessing to training and evaluating the model.
+**Prerequisites**
+   Before running the script, ensure you have the following prerequisites installed:
+      - Python 3.6 or later
+      - PyTorch
+      - Transformers library
+      - Datasets library
+      - Accelerate library
+      - Seaborn and Matplotlib for visualization (optional)
+      - tqdm for progress bars
+   You can install these prerequisites using pip:
+
+   ```bash
+   pip install torch transformers datasets accelerate seaborn matplotlib tqdm
+   ```
+   
+   **Script Usage**   
    a. Navigate to the Script Directory: Make sure you are in the directory containing the train_BERT_3.py script.
    b. Set Up Parameters (Optional): You can modify the script to change parameters like r: 16, lora_alpha: 32, lora_dropout: 0.05, Batch Size: 16
    c. Run the Script: Execute the script using the following command:
@@ -64,11 +81,13 @@ Our goal is to develop a system that can efficiently and accurately provide answ
    ```bash
    train_BERT_3.py
    ```
+   
    This will start the training process of the BERT model with LoRA on the SQuAD 2.0 dataset. The script handles the following:
       - Data loading and preprocessing: Tokenizes the SQuAD dataset and prepares it for training.
       - Model initialization: Loads the BERT model pre-trained
       - Training: Fine-tunes the model on the prepared dataset.
       - Evaluation: Evaluates the model on the validation set.
+   
    d: you can set LoRA = TRUE / FALSE to define whether using LoRA for fine-tuning
    e: Monitoring Training Progress: The script uses tqdm to display the training progress. Keep an eye on the progress bars and the printed metrics to monitor the training.
    f. Model Saving: The trained model is automatically saved in the specified MODEL_PATH. You can change the path in the script if needed.
