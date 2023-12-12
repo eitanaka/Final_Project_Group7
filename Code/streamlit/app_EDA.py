@@ -20,7 +20,7 @@ IMAGE_PATH14_t = os.path.join(IMAGE_PATH, "ans_vs_unans_train.png")
 IMAGE_PATH14_d = os.path.join(IMAGE_PATH, "ans_vs_unans_dev.png" )
 IMAGE_PATH15 = os.path.join(IMAGE_PATH, "Most_com_ques_train.jpeg" )
 IMAGE_PATH16 = os.path.join(IMAGE_PATH, "most_com_words_ques_dev.jpeg" )
-IMAGE_PATH17 = os.path.join(IMAGE_PATH, "distribution dev.jpeg" )
+IMAGE_PATH17 = os.path.join(IMAGE_PATH, "distribution_train.jpeg" )
 IMAGE_PATH18 = os.path.join(IMAGE_PATH, "distribution dev.jpeg" )
 IMAGE_PATH19 = os.path.join(IMAGE_PATH, "Average context question similarity and answer position analysis.jpeg" )
 IMAGE_PATH20 = os.path.join(IMAGE_PATH, "comparison.png" )
@@ -59,9 +59,10 @@ options = ['Context Length Analysis Train',
            'Answer Length Analysis Test',
            'Answerable vs Unanswerable Questions Train',
            'Answerable vs Unanswerable Questions Test',
-           'Word Length Analysis',
+           'Most Common question train',
+           'Most common question test',
            'Distribution of question type train',
-           'Distribution of question type dev',
+           'Distribution of question type test',
            'Answer context similarity and Answer position analysis']
 
 # Create a radio button in Streamlit
@@ -77,9 +78,10 @@ image_paths = {
 'Answer Length Analysis Test':IMAGE_PATH13_d,
 'Answerable vs Unanswerable Questions Train': IMAGE_PATH14_t,
 'Answerable vs Unanswerable Questions Test': IMAGE_PATH14_d,
-'Word Length Analysis':IMAGE_PATH15,
-'Distribution of question type train': IMAGE_PATH16,
-'Distribution of question type test': IMAGE_PATH17,
+'Most Common question train':IMAGE_PATH15,
+'Most common question test' : IMAGE_PATH16,
+'Distribution of question type train': IMAGE_PATH17,
+'Distribution of question type test': IMAGE_PATH18,
 'Answer context similarity and Answer position analysis': IMAGE_PATH19,
 }
 
