@@ -48,7 +48,7 @@ Our goal is to develop a system that can efficiently and accurately provide answ
       - Model initialization: Loads the ELECTRA model pre-trained on the Google ELECTRA base discriminator.
       - Training: Fine-tunes the model on the prepared dataset.
       - Evaluation: Evaluates the model on the validation set.
-      - 
+   
    d. Monitoring Training Progress: The script uses tqdm to display the training progress. Keep an eye on the progress bars and the printed metrics to monitor the training.
    e. Model Saving: The trained model is automatically saved in the specified MODEL_PATH. You can change the path in the script if needed.
    f. Evaluation and Prediction: Post-training, the script evaluates the model on the validation dataset and can be used to make predictions on new data.
