@@ -26,6 +26,32 @@ Group-Proposal - This folder includes the proposal of the project in PDF version
 
 # Installation and Usage
 
-1. Clone the Repository: To start working with the project, clone it from GitHub using the following command:
+### 1. Clone the Repository:
+   To start working with the project, clone it from GitHub using the following command:
    
    Git clone https://github.com/eitanaka/NLP_Final_Project_Group7.git
+
+### 2. Data Loading:
+   
+   * Load the data
+           train - https://rajpurkar.github.io/SQuAD-explorer/dataset/train-v2.0.json
+            Dev -  https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.
+### 3. Train :
+   Install the dependencies and start working on the train dataset
+
+# Contributors
+
+Cody Yu
+Pon swarnalaya Ravichandran
+Ei Tanaka
+
+# License
+(add only if applicable)
+
+# Acknowledgments
+
+(Acknowledgments to people, resources, or institutions)
+
+For more details, please refer to individual files and folders.
+
+   
