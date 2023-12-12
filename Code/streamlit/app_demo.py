@@ -8,9 +8,9 @@ from transformers import ElectraTokenizer, ElectraForQuestionAnswering, BertToke
 # ============================== Setup / constants ====================================
 # Set up paths
 OS_PATH = os.getcwd()
+MODEL_PATH = os.path.join(OS_PATH, "Models")
 os.chdir("../../")
 ROOT_PATH = os.getcwd()
-MODEL_PATH = os.path.join(ROOT_PATH, "Models")
 os.chdir(OS_PATH)
 
 # Model Checkpoints

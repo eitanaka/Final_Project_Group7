@@ -48,14 +48,13 @@ st.write("Figure 1: ELECTRA Architecture (Source: Electra Paper)")
 st.subheader("BERT with LORA")
 
 st.markdown("""
-    #### • Transformer 3, an  attention mechanism :Encoder, Decoder
+    #### • Transformer, an  attention mechanism :
     #### • Encoder: Its target is to process the input text and understand the context of each word or token within it.
-    #### • Decoder: Its target is to take the encoded input and, step by step, produces the output text.
     #### • ATTENTION Mechanism: It gives the model ability to weigh the importance of different words in the sentence relative to each other.
     #### • Embedding Layers: Find the Embedding Representation of Each words (Word Embedding, Positional Embedding, Segment Embedding)
-    #### • Pretraining: Marked Language Models/ Next Sentence Prediction
+    #### • Pretraining: Masked Language Models/ Next Sentence Prediction
     #### • Fine-Tuning on QA: Start Vector/ End Vector
-    #### • Why using LORA? Base BERT model: 144millions parameters 
+    #### • Why using LORA? Base BERT model: 110 millions parameters 
     #### • A method to learn a lower-dimensional, task-specific representation of the layer’s weights.
 """)
 
@@ -69,11 +68,13 @@ st.write("Figure 3: LORA Architecture ")
 st.subheader("Training Setups")
 
 st.markdown("""
-### ELECTRA Model Fine-Tuning for SQuAD 2.0
-
-#### - **Dataset**: Utilized the SQuAD 2.0 dataset with 129,941 training, 5,951 development, and 5,915 test examples.
+#### - **Dataset**: Utilized the SQuAD 2.0 dataset with 130,319 training, 11,873 development examples.
 #### - **Preprocessing**: Tokenization, sliding windows, padding, and answer localization.
-#### - **Evaluation Metrics**: Exact Match (EM) and F1 score, with negative log-likelihood monitoring for overfitting.
+#### - **Evaluation Metrics**: Exact Match (EM) and F1 score.
+""")
+
+st.markdown("""
+### ELECTRA Model Fine-Tuning for SQuAD 2.0
 
 #### **Hyperparameters**:
 #### - Maximum Sequence Length: 384
@@ -91,10 +92,6 @@ st.markdown("""
 
 st.markdown("""
 ### BERT Model Fine-Tuning for SQuAD 2.0
-
-#### - **Dataset**: Utilized the SQuAD 2.0 dataset with 129,941 training, 5,951 development, and 5,915 test examples.
-#### - **Preprocessing**: The dataset is tokenized using BERT's tokenizer. Each example is processed to identify the start and end positions of answers within the context.
-#### - **Evaluation Metrics**: F1 score
 
 #### **Hyperparameters**:
 #### - Model: bert-base-uncased with optional LoRA configuration.
