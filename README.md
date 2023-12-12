@@ -57,8 +57,23 @@ Our goal is to develop a system that can efficiently and accurately provide answ
    f. Evaluation and Prediction: Post-training, the script evaluates the model on the validation dataset and can be used to make predictions on new data.
    
 5. **Fine-Tuning the BERT with LoRA**:
-
-6. **Play with the streamlit app**
+   a. Navigate to the Script Directory: Make sure you are in the directory containing the train_BERT_3.py script.
+   b. Set Up Parameters (Optional): You can modify the script to change parameters like r: 16, lora_alpha: 32, lora_dropout: 0.05, Batch Size: 16
+   c. Run the Script: Execute the script using the following command:
+   
+   ```bash
+   train_BERT_3.py
+   ```
+   This will start the training process of the BERT model with LoRA on the SQuAD 2.0 dataset. The script handles the following:
+      - Data loading and preprocessing: Tokenizes the SQuAD dataset and prepares it for training.
+      - Model initialization: Loads the BERT model pre-trained
+      - Training: Fine-tunes the model on the prepared dataset.
+      - Evaluation: Evaluates the model on the validation set.
+   d: you can set LoRA = TRUE / FALSE to define whether using LoRA for fine-tuning
+   e: Monitoring Training Progress: The script uses tqdm to display the training progress. Keep an eye on the progress bars and the printed metrics to monitor the training.
+   f. Model Saving: The trained model is automatically saved in the specified MODEL_PATH. You can change the path in the script if needed.
+   g. Evaluation and Prediction: Post-training, the script evaluates the model on the validation dataset and can be used to make predictions on new data.
+7. **Play with the streamlit app**
    To start working with the streamlit, make sure to install streamlit
    ```bash
    pip install streamlit
