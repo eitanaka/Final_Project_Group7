@@ -3,7 +3,10 @@
 ### Data Science, Columbian College of Arts & Science, George Washinton University
 ### Cody Yu, Pon Swarnalaya Ravichandran, Ei Tanaka
 
-Purpose of the project : Our goal is to develop a system that can efficiently and accurately provide answers to factoid questions, harnessing the strengths of both IR-based and knowledge-based approaches. 
+# Overview
+Our goal is to develop a system that can efficiently and accurately provide answers to factoid questions, harnessing the strengths of both IR-based and knowledge-based approaches by using two models BERT and ELECTRA 
+
+# Project Structure
 
 README.md – Defines the structure of the repo
 
@@ -20,3 +23,9 @@ Ei-tanaka-Individual-Project - This folder contains the folders of report and co
 Ponswarnalaya-ravichandran-Individual-Project - This folder contains the folders of report and codes that Ponswarnalaya-ravichandran worked on.
 
 Group-Proposal - This folder includes the proposal of the project in PDF version
+
+# Installation and Usage
+
+1. Clone the Repository: To start working with the project, clone it from GitHub using the following command:
+   
+   Git clone https://github.com/eitanaka/NLP_Final_Project_Group7.git
