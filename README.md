@@ -15,9 +15,9 @@ Our goal is to develop a system that can efficiently and accurately provide answ
 
 ## Installation and Usage
 
-### 1. Clone the Repository:
+1. **Clone the Repository**:
    To start working with the project, clone it from GitHub using the following command:
-   
+   ```bash
    Git clone https://github.com/eitanaka/NLP_Final_Project_Group7.git
 
 ### 2. Data Loading:
